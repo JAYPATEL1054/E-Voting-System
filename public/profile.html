@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>My Profile - E-Voting System</title>
+   <link rel="stylesheet" href="profile-styles.css">
+   <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
+   <div class="top-bar">
+       <div></div>
+       <div class="profile-menu">
+           <button class="profile-btn">
+               <span class="profile-icon">☰</span>
+           </button>
+           <div class="profile-content">
+               <a href="profile.html">My Profile</a>
+               <a href="settings.html">Settings</a>
+               <a href="logout.html">Logout</a>
+           </div>
+       </div>
+   </div>
+
+
+   <header>
+       <h1>E-Voting System</h1>
+       <p>Secure, Transparent, and Efficient Voting Platform</p>
+   </header>
+
+
+   <nav>
+       <form class="search-form">
+           <input type="search" placeholder="Search..." aria-label="Search">
+           <button type="submit">Search</button>
+       </form>
+       <ul>
+           <a href="home.html">Home</a>
+           <a href="login.html">Login</a>
+           <a href="about.html">About</a>
+           <a href="FAQs.html">FAQs</a>
+       </ul>
+   </nav>
+
+
+   <main>
+       <section class="profile-section">
+           <h2>My Profile</h2>
+           <link rel="stylesheet" href="profilestyles.css">
+           <div class="profile-container">
+               <div class="profile-info">
+                   <h3>Personal Information</h3>
+                   <form class="profile-form">
+                       <div class="form-group">
+                           <label for="fullName">Full Name</label>
+                           <input type="text" id="fullName" value="John Doe" readonly>
+                       </div>
+                       <div class="form-group">
+                           <label for="email">Email Address</label>
+                           <input type="email" id="email" value="john.doe@example.com" readonly>
+                       </div>
+                       <div class="form-group">
+                           <label for="studentId">Student ID</label>
+                           <input type="text" id="studentId" value="STU123456" readonly>
+                       </div>
+                       <div class="form-group">
+                           <label for="department">Department</label>
+                           <input type="text" id="department" value="Computer Science" readonly>
+                       </div>
+                   </form>
+               </div>
+
+
+               <div class="voting-history">
+                   <h3>Voting History</h3>
+                   <div class="history-list">
+                       <div class="history-item">
+                           <h4>Student Council Elections 2024</h4>
+                           <p>Date: December 15, 2024</p>
+                           <span class="status completed">Completed</span>
+                       </div>
+                       <div class="history-item">
+                           <h4>Department Representative Elections</h4>
+                           <p>Date: November 1, 2024</p>
+                           <span class="status completed">Completed</span>
+                       </div>
+                   </div>
+               </div>
+
+
+               <div class="upcoming-elections">
+                   <h3>Upcoming Elections</h3>
+                   <div class="election-list">
+                       <div class="election-item">
+                           <h4>Student Council Elections 2025</h4>
+                           <p>Date: February 15, 2025</p>
+                           <span class="status pending">Pending</span>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </section>
+   </main>
+
+
+   <footer>
+       <p>&copy; 2025 E-Voting System. All rights reserved.</p>
+   </footer>
+</body>
+</html>

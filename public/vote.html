@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for India</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+       
+        body {
+            background: linear-gradient(135deg, #e6f7ff 0%, #bbd9f1 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+       
+        .header {
+            background: linear-gradient(90deg, #1a4b8c, #2c5ea0);
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+       
+        .header h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+       
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+       
+        .container {
+            width: 90%;
+            max-width: 1200px;
+        }
+       
+        .voting-frame {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+       
+        .voter-info-display {
+            background-color: #f3f9ff;
+            padding: 20px;
+            border-bottom: 1px solid #e1e8ed;
+            text-align: center;
+        }
+        
+        .voter-info-display p {
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+        
+        .voter-info-display strong {
+            color: #1a4b8c;
+        }
+       
+        .parties-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+       
+        .party-option {
+            flex: 1;
+            min-width: 250px;
+            padding: 25px;
+            text-align: center;
+            border-right: 1px dashed #eee;
+            border-bottom: 1px dashed #eee;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+       
+        .party-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            z-index: 1;
+        }
+       
+        .party-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #2c5ea0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            transform: rotate(5deg);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+       
+        .party-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            padding: 20px;
+            border-radius: 50%;
+            background-color: #f9f9f9;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+       
+        .bjp-logo { background-color: #f9f9f9; }
+        .congress-logo { background-color: #f9f9f9; }
+        .aap-logo { background-color: #f9f9f9; }
+        .nota-logo { background-color: #f9f9f9; }
+       
+        .logo-img {
+            max-width: 100%;
+            max-height: 100%;
+            transition: transform 0.3s ease;
+        }
+       
+        .party-option:hover .logo-img {
+            transform: scale(1.1);
+        }
+       
+        .party-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #333;
+        }
+       
+        .party-leader {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+       
+        .vote-btn {
+            background: linear-gradient(90deg, #2c5ea0, #1a4b8c);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+       
+        .vote-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 75, 140, 0.3);
+        }
+       
+        .vote-btn:active {
+            transform: translateY(0);
+        }
+       
+        .vote-btn.voted {
+            background: linear-gradient(90deg, #27ae60, #219653);
+        }
+       
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #2c5ea0;
+            border-radius: 50%;
+            z-index: 999;
+            pointer-events: none;
+        }
+       
+        @media (max-width: 768px) {
+            .party-option {
+                min-width: 100%;
+                border-right: none;
+            }
+           
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Vote for India's Future</h1>
+        <p class="subtitle">Cast your vote for a better tomorrow</p>
+    </div>
+   
+    <div class="container">
+        <div class="voting-frame">
+            <!-- Voter Information will be inserted here by JavaScript -->
+            <div class="parties-container">
+                <!-- BJP -->
+                <div class="party-option">
+                    <span class="party-badge" id="bjp-badge">VOTED</span>
+                    <div class="party-logo bjp-logo">
+                        <img src="bjp.jpg" class="logo-img">
+                    </div>
+                    <h2 class="party-name">BJP</h2>
+                    <p class="party-leader">Narendra Modi</p>
+                    <button class="vote-btn" data-party="BJP">Vote BJP</button>
+                </div>
+               
+                <!-- Congress -->
+                <div class="party-option">
+                    <span class="party-badge" id="congress-badge">VOTED</span>
+                    <div class="party-logo congress-logo">
+                        <img src="cog.jpg" class="logo-img">
+                    </div>
+                    <h2 class="party-name">Congress</h2>
+                    <p class="party-leader">Rahul Gandhi</p>
+                    <button class="vote-btn" data-party="Congress">Vote Congress</button>
+                </div>
+               
+                <!-- AAP -->
+                <div class="party-option">
+                    <span class="party-badge" id="aap-badge">VOTED</span>
+                    <div class="party-logo aap-logo">
+                        <img src="aap.jpg" class="logo-img">
+                    </div>
+                    <h2 class="party-name">AAP</h2>
+                    <p class="party-leader">Arvind Kejriwal</p>
+                    <button class="vote-btn" data-party="AAP">Vote AAP</button>
+                </div>
+               
+                <!-- NOTA -->
+                <div class="party-option">
+                    <span class="party-badge" id="nota-badge">VOTED</span>
+                    <div class="party-logo nota-logo">
+                        <img src="nota.jpg" class="logo-img">
+                    </div>
+                    <h2 class="party-name">NOTA</h2>
+                    <p class="party-leader">None of the Above</p>
+                    <button class="vote-btn" data-party="NOTA">Vote NOTA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize vote counts
+            let votes = {
+                BJP: 0,
+                Congress: 0,
+                AAP: 0,
+                NOTA: 0
+            };
+            
+            let hasVoted = false;
+            
+            // Retrieve voter information from session storage (set during voter lookup)
+            const voterInfo = JSON.parse(sessionStorage.getItem('voterInfo')) || {};
+            const voterId = voterInfo.voterId;
+            
+            // Check if user has completed voter verification
+            if (!voterId) {
+                // Redirect to voter lookup if no voter ID found
+                alert('Please complete voter verification first');
+                window.location.href = 'voter-lookup.html';
+                return;
+            }
+            
+            // Display voter information
+            const voterInfoElement = document.createElement('div');
+            voterInfoElement.className = 'voter-info-display';
+            voterInfoElement.innerHTML = `
+                <p><strong>Voter ID:</strong> ${voterId}</p>
+                <p><strong>Name:</strong> ${voterInfo.name || 'Not available'}</p>
+                <p><strong>Constituency:</strong> ${voterInfo.constituency || 'Not available'}</p>
+            `;
+            
+            // Insert voter info at the top of the voting frame
+            const votingFrame = document.querySelector('.voting-frame');
+            votingFrame.insertBefore(voterInfoElement, votingFrame.firstChild);
+            
+            // Get elements
+            const voteButtons = document.querySelectorAll('.vote-btn');
+            
+            // Add event listeners to vote buttons
+            voteButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    if (hasVoted) return;
+                    
+                    // Get party from data attribute
+                    const party = this.getAttribute('data-party');
+                    
+                    try {
+                        // Show loading state
+                        this.disabled = true;
+                        this.textContent = 'Submitting...';
+                        
+                        // Send vote to server
+                        const response = await fetch('/api/cast-vote', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                voterId: voterId,
+                                party: party,
+                                pollingStation: voterInfo.pollingStationName,
+                                constituency: voterInfo.constituency
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // Mark as voted
+                            hasVoted = true;
+                            
+                            // Show voted badge for selected party
+                            document.getElementById(`${party.toLowerCase()}-badge`).style.opacity = '1';
+                            
+                            // Update button
+                            this.classList.add('voted');
+                            this.textContent = 'Voted ✓';
+                            
+                            // Disable other buttons
+                            voteButtons.forEach(btn => {
+                                if (btn !== this) {
+                                    btn.disabled = true;
+                                    btn.style.opacity = '0.5';
+                                    btn.style.cursor = 'not-allowed';
+                                }
+                            });
+                            
+                            // Create confetti effect
+                            createConfetti();
+                            
+                            // Store vote data in session storage to display on home page
+                            sessionStorage.setItem('voteData', JSON.stringify({
+                                voterId: voterId,
+                                voterName: voterInfo.name,
+                                constituency: voterInfo.constituency,
+                                votedParty: party,
+                                timestamp: new Date().toISOString()
+                            }));
+                            
+                            // Store vote confirmation in session
+                            sessionStorage.setItem('hasVoted', 'true');
+                            
+                            // Show success message and redirect after short delay
+                            setTimeout(() => {
+                                alert('Vote cast successfully! Redirecting to home page...');
+                                window.location.href = 'home.html';
+                            }, 3000); // 3 second delay to show confetti briefly
+                            
+                        } else {
+                            // Show error
+                            alert(data.message || 'Failed to cast vote. Please try again.');
+                            this.disabled = false;
+                            this.textContent = `Vote ${party}`;
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error casting vote:', error);
+                        alert('An error occurred while casting your vote. Please try again.');
+                        this.disabled = false;
+                        this.textContent = `Vote ${party}`;
+                    }
+                });
+            });
+            
+            // Confetti effect
+            function createConfetti() {
+                const colors = ['#1a4b8c', '#2c5ea0', '#4682B4', '#87CEEB', '#B0E0E6'];
+                
+                // Create confetti elements
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                    confetti.style.opacity = Math.random();
+                    confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

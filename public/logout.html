@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Logout - E-Voting System</title>
+   <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="logoutstyles.css">
+   <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
+   <div class="top-bar">
+       <div></div>
+       <div class="profile-menu">
+           <button class="profile-btn">
+               <span class="profile-icon">☰</span>
+           </button>
+           <div class="profile-content">
+               <a href="profile.html">My Profile</a>
+               <a href="settings.html">Settings</a>
+               <a href="logout.html">Logout</a>
+           </div>
+       </div>
+   </div>
+
+
+   <header>
+       <h1>E-Voting System</h1>
+       <p>Secure, Transparent, and Efficient Voting Platform</p>
+   </header>
+
+
+   <nav>
+       <form class="search-form">
+           <input type="search" placeholder="Search..." aria-label="Search">
+           <button type="submit">Search</button>
+       </form>
+       <ul>
+           <a href="home.html">Home</a>
+           <a href="login.html">Login</a>
+           <a href="about.html">About</a>
+           <a href="FAQs.html">FAQs</a>
+       </ul>
+   </nav>
+
+
+   <main>
+       <section class="logout-section">
+           <div class="logout-container">
+               <div class="logout-icon">⚠️</div>
+               <h2>Confirm Logout</h2>
+               <p class="logout-message">Are you sure you want to log out of your account?</p>
+               <p>You will need to log in again to access your voting dashboard and participate in elections.</p>
+               <div class="button-group">
+                   <a href="#" class="button-primary" onclick="confirmLogout()">Yes, Logout</a>
+                   <a href="home.html" class="button-secondary">Cancel</a>
+               </div>
+           </div>
+       </section>
+   </main>
+
+
+   <footer>
+       <p>&copy; 2025 E-Voting System. All rights reserved.</p>
+   </footer>
+
+
+   <script>
+       function confirmLogout() {
+           // Add logout logic here (e.g., clearing session, redirecting)
+           window.location.href = 'login.html';
+       }
+   </script>
+</body>
+</html>

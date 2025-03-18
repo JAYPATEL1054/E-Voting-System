@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="description" content="Learn more about the E-Voting System, which ensures secure, transparent, and efficient elections.">
+   <title>Admin - Add Voter</title>
+   <link rel="stylesheet" href="styles.css">
+   <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #1a2980;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E-Voting System</h1>
+        <p>Secure, Transparent, and Efficient Voting Platform</p>
+    </header>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="about.html">About</a>
+            <a href="FAQs.html" >FAQs</a>
+        </nav>
+    <main>
+    <h1>Add New Voter</h1>
+    <div id="message" class="message" style="display: none;"></div>
+    
+    <form id="addVoterForm">
+        <div class="form-group">
+            <label for="voterId">Voter ID*:</label>
+            <input type="text" id="voterId" name="voterId" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="name">Full Name*:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age">
+        </div>
+        
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="constituency">Assembly Constituency:</label>
+            <input type="text" id="constituency" name="constituency">
+        </div>
+        
+        <div class="form-group">
+            <label for="pollingStationNumber">Polling Station Number:</label>
+            <input type="text" id="pollingStationNumber" name="pollingStationNumber">
+        </div>
+        
+        <div class="form-group">
+            <label for="pollingStationName">Polling Station Name:</label>
+            <input type="text" id="pollingStationName" name="pollingStationName">
+        </div>
+        
+        <div class="form-group">
+            <label for="pollingStationAddress">Polling Station Address:</label>
+            <input type="text" id="pollingStationAddress" name="pollingStationAddress">
+        </div>
+        
+        <button type="submit">Add Voter</button>
+    </form>
+    </main>
+    <script>
+            document.getElementById('addVoterForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    voterId: document.getElementById('voterId').value,
+                    name: document.getElementById('name').value,
+                    age: document.getElementById('age').value,
+                    gender: document.getElementById('gender').value,
+                    constituency: document.getElementById('constituency').value,
+                    pollingStationNumber: document.getElementById('pollingStationNumber').value,
+                    pollingStationName: document.getElementById('pollingStationName').value,
+                    pollingStationAddress: document.getElementById('pollingStationAddress').value
+                };
+                
+                try {
+                    const response = await fetch('http://localhost:5500/api/admin/add-voter', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify(formData)
+                    
+                    });
+                    
+                    const data = await response.json();
+                    const messageDiv = document.getElementById('message');
+                    
+                    if (data.success) {
+                        messageDiv.textContent = 'Voter added successfully!';
+                        messageDiv.className = 'message success';
+                        document.getElementById('addVoterForm').reset();
+                    }    
+                     else {
+                        messageDiv.textContent = data.message || 'Failed to add voter';
+                        messageDiv.className = 'message error';
+                    }
+                    
+                    messageDiv.style.display = 'block';
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.textContent = 'An error occurred. Please try again.';
+                    messageDiv.className = 'message error';
+                    messageDiv.style.display = 'block';
+                }
+            });
+    </script>
+    <footer>
+        <p>&copy; 2025 E-Voting System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

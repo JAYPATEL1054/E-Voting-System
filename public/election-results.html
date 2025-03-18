@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+       
+        body {
+            background: linear-gradient(135deg, #e6f7ff 0%, #bbd9f1 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+       
+        .header {
+            background: linear-gradient(90deg, #1a4b8c, #2c5ea0);
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+       
+        .header h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+       
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+       
+        .container {
+            width: 90%;
+            max-width: 1200px;
+        }
+       
+        .results-section {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+       
+        .results-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+       
+        .results-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 3px;
+            background: linear-gradient(90deg, #1a4b8c, #2c5ea0);
+        }
+       
+        .results-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+       
+        .result-item {
+            flex: 1;
+            min-width: 200px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+       
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+       
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2c5ea0;
+        }
+       
+        .result-label {
+            font-size: 1.2rem;
+            color: #666;
+        }
+       
+        .back-btn {
+            background: linear-gradient(90deg, #2c5ea0, #1a4b8c);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+       
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 75, 140, 0.3);
+        }
+       
+        .actions {
+            display: flex;
+            justify-content: center;
+        }
+       
+        @media (max-width: 768px) {
+            .result-item {
+                min-width: 100%;
+            }
+           
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Election Results</h1>
+        <p class="subtitle">Current voting statistics</p>
+    </div>
+   
+    <div class="container">
+        <div class="results-section" id="results-section">
+            <h2 class="results-title">Vote Counts</h2>
+            <div class="results-container">
+                <div class="result-item">
+                    <div class="result-value" id="bjp-result">0</div>
+                    <div class="result-label">BJP</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value" id="congress-result">0</div>
+                    <div class="result-label">Congress</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value" id="aap-result">0</div>
+                    <div class="result-label">AAP</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-value" id="nota-result">0</div>
+                    <div class="result-label">NOTA</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="back-btn" id="back-btn">Back to Home</button>
+            </div>
+        </div>
+    </div>
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize vote counts
+            let votes = {
+                BJP: 0,
+                Congress: 0,
+                AAP: 0,
+                NOTA: 0
+            };
+            
+            // Get elements
+            const backBtn = document.getElementById('back-btn');
+            
+            // Check if there's any vote data stored from previous voting
+            const voteData = JSON.parse(sessionStorage.getItem('voteData')) || null;
+            
+            // Fetch vote counts from server
+            async function fetchVoteCounts() {
+                try {
+                    const countsResponse = await fetch('/api/vote-counts');
+                    const countsData = await countsResponse.json();
+                    
+                    if (countsData.success) {
+                        // Update vote counts with server data
+                        votes = countsData.counts;
+                        
+                        // Update results display
+                        updateResultsDisplay();
+                    } else {
+                        console.error('Failed to fetch vote counts:', countsData.message);
+                    }
+                } catch (error) {
+                    console.error('Error fetching vote counts:', error);
+                }
+            }
+            
+            // Update results display with current vote counts
+            function updateResultsDisplay() {
+                document.getElementById('bjp-result').textContent = votes.BJP;
+                document.getElementById('congress-result').textContent = votes.Congress;
+                document.getElementById('aap-result').textContent = votes.AAP;
+                document.getElementById('nota-result').textContent = votes.NOTA;
+            }
+            
+            // Fetch initial vote counts
+            fetchVoteCounts();
+            
+            // Set up periodic refresh (every 30 seconds)
+            const refreshInterval = setInterval(fetchVoteCounts, 30000);
+            
+            // Back button
+            backBtn.addEventListener('click', function() {
+                window.location.href = 'home.html';
+            });
+            
+            // Clean up interval on page unload
+            window.addEventListener('beforeunload', function() {
+                clearInterval(refreshInterval);
+            });
+        });
+    </script>
+</body>
+</html>

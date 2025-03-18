@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Settings - E-Voting System</title>
+   <link rel="stylesheet" href="styles.css">
+   <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
+   <div class="top-bar">
+       <div></div>
+       <div class="profile-menu">
+           <button class="profile-btn">
+               <span class="profile-icon">☰</span>
+           </button>
+           <div class="profile-content">
+               <a href="profile.html">My Profile</a>
+               <a href="settings.html">Settings</a>
+               <a href="logout.html">Logout</a>
+           </div>
+       </div>
+   </div>
+
+
+   <header>
+       <h1>Account Settings</h1>
+       <p>Manage your account preferences and security settings</p>
+   </header>
+
+
+   <nav>
+       <form class="search-form">
+           <input type="search" placeholder="Search..." aria-label="Search">
+           <button type="submit">Search</button>
+       </form>
+       <ul>
+           <a href="home.html">Home</a>
+           <a href="login.html">Login</a>
+           <a href="about.html">About</a>
+           <a href="FAQs.html">FAQs</a>
+       </ul>
+   </nav>
+
+
+   <main class="settings-container">
+       <div class="settings-sidebar">
+           <ul class="settings-nav">
+               <li class="active"><a href="#profile">Profile Settings</a></li>
+               <li><a href="#security">Security</a></li>
+               <li><a href="#notifications">Notifications</a></li>
+               <li><a href="#privacy">Privacy</a></li>
+               <li><a href="#accessibility">Accessibility</a></li>
+           </ul>
+       </div>
+
+
+       <div class="settings-content">
+           <section id="profile" class="settings-section">
+               <h2>Profile Settings</h2>
+               <form class="settings-form">
+                   <div class="form-group">
+                       <label for="fullName">Full Name</label>
+                       <input type="text" id="fullName" value="John Doe">
+                   </div>
+                   <div class="form-group">
+                       <label for="email">Email</label>
+                       <input type="email" id="email" value="john.doe@example.com">
+                   </div>
+                   <div class="form-group">
+                       <label for="phone">Phone Number</label>
+                       <input type="tel" id="phone" value="+1 234 567 8900">
+                   </div>
+                   <div class="form-group">
+                       <label for="language">Preferred Language</label>
+                       <select id="language">
+                           <option value="en">English</option>
+                           <option value="es">Spanish</option>
+                           <option value="fr">French</option>
+                       </select>
+                   </div>
+                   <button type="submit" class="save-btn">Save Changes</button>
+               </form>
+           </section>
+       </div>
+   </main>
+
+
+   <footer>
+       <p>&copy; 2025 E-Voting System. All rights reserved.</p>
+   </footer>
+</body>
+</html>

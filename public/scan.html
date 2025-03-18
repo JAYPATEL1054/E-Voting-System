@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ID Verification</title>
+   <link rel="stylesheet" href="styles.css">
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           background-color: #f4f4f4;
+           text-align: center;
+           padding: 50px;
+       }
+       .container {
+           background: white;
+           padding: 20px;
+           border-radius: 10px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           display: inline-block;
+       }
+       input, button {
+           width: 80%;
+           padding: 10px;
+           margin: 10px 0;
+           border: 1px solid #ccc;
+           border-radius: 5px;
+       }
+       button {
+           background-color: #1a2980;
+           color: white;
+           border: none;
+           cursor: pointer;
+           pointer-events: auto;
+           z-index: 10;
+           padding: 10px 20px;
+           font-size: 16px;
+           border-radius: 5px;
+           transition: background 0.3s;
+       }
+       button:hover {
+           background-color: #122263;
+       }
+              
+   </style>
+   <script>
+       function extractVoterDetails() {
+           let voterFile = document.getElementById("voterFile").files[0];
+           let aadhaarFile = document.getElementById("aadhaarFile").files[0];
+          
+           if (!aadhaarFile || !voterFile) {
+               alert("Please upload both Aadhaar and Voter ID card properly.");
+               return;
+           }
+          
+           let validExtensions = ["image/jpeg", "image/png", "application/pdf"];
+          
+           if (!validExtensions.includes(aadhaarFile.type) || !validExtensions.includes(voterFile.type)) {
+               alert("Please upload image properly. Supported formats: JPG, PNG, PDF");
+               return;
+           }
+          
+           // Placeholder for OCR and API call to get district and area
+           alert("Extracting district and area details from Voter ID...");
+           // Simulating fetched data
+           setTimeout(() => {
+               document.getElementById("voterDetails").innerHTML =
+                   "District: Example District<br>Area: Example Area";
+           }, 2000);
+       }
+   </script>
+</head>
+<body>
+   <div class="container">
+       <h2>ID Verification</h2>
+       <label for="aadhaarFile">Upload Aadhaar Card:</label><br>
+       <input type="file" id="aadhaarFile" accept="image/*,.pdf"><br>
+      
+       <label for="voterFile">Upload Voter ID Card:</label><br>
+       <input type="file" id="voterFile" accept="image/*,.pdf"><br>
+      
+       <button class="button" onclick="extractVoterDetails()">Verify</button>
+       <p id="voterDetails"></p>
+   </div>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter lookup</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .progress-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+
+        .step::after {
+            content: '';
+            width: 100%;
+            height: 3px;
+            background-color: #ccc;
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            z-index: 1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 3px solid #ccc;
+            z-index: 2;
+            position: relative;
+        }
+
+        .step.completed .step-circle {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .step.active .step-circle {
+            border-color: #1a2980;
+            background-color: #1a2980;
+        }
+
+        .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .step.completed .step-label,
+        .step.active .step-label {
+            color: #1a2980;
+            font-weight: bold;
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .message {
+            text-align: center;
+            color: #1a2980;
+            margin-bottom: 2rem;
+        }
+
+        .continue-btn {
+            display: block;
+            width: 200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #1a2980;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .continue-btn:hover {
+            background-color: #26d0ce;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .loading {
+            text-align: center;
+            display: none;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1a2980;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .result-container {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .result-container.visible {
+            display: block;
+        }
+        
+        .voter-info {
+            margin-top: 20px;
+        }
+        
+        .voter-info div {
+            margin-bottom: 15px;
+            display: flex;
+        }
+        
+        .voter-info label {
+            font-weight: bold;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E-Voting System</h1>
+        <p>Secure, Transparent, and Efficient Voting Platform</p>
+    </header>
+
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="login.html" class="active">Login</a>
+        <a href="about.html">About</a>
+        <a href="FAQs.html">FAQs</a>
+    </nav>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="step completed">
+                <div class="step-circle"></div>
+                <div class="step-label">Login</div>
+            </div>
+            <div class="step completed">
+                <div class="step-circle"></div>
+                <div class="step-label">Verification</div>
+            </div>
+            <div class="step active">
+                <div class="step-circle"></div>
+                <div class="step-label">Voter Lookup</div>
+            </div>
+            <div class="step">
+                <div class="step-circle"></div>
+                <div class="step-label">Vote</div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="message">
+            <h2>Voter Information Lookup</h2>
+            <p>Please verify your voter information before proceeding to vote.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="voterId">Enter Your Voter ID:</label>
+            <input type="text" id="voterId" placeholder="e.g., ABC1234567">
+        </div>
+        
+        <button onclick="lookupVoter()" class="continue-btn">Find My Voter Information</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Looking up your information...</p>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="result-container" id="resultContainer">
+            <h2>Your Voter Information</h2>
+            
+            <div class="voter-info">
+                <div>
+                    <label>Voter ID:</label>
+                    <span id="resultVoterId"></span>
+                </div>
+                <div>
+                    <label>Voter Name:</label>
+                    <span id="resultName"></span>
+                </div>
+                <div>
+                    <label>Age:</label>
+                    <span id="resultAge"></span>
+                </div>
+                <div>
+                    <label>Gender:</label>
+                    <span id="resultGender"></span>
+                </div>
+                <div>
+                    <label>Assembly Constituency:</label>
+                    <span id="resultConstituency"></span>
+                </div>
+                <div>
+                    <label>Polling Station Number:</label>
+                    <span id="resultStationNumber"></span>
+                </div>
+                <div>
+                    <label>Polling Station Name:</label>
+                    <span id="resultStationName"></span>
+                </div>
+                <div>
+                    <label>Polling Station Address:</label>
+                    <span id="resultAddress"></span>
+                </div>
+            </div>
+            
+            <button id="proceedButton" class="continue-btn">Continue to Vote</button>
+        </div>
+    </main>
+        <script>
+            async function lookupVoter() {
+                const voterId = document.getElementById("voterId").value.trim();
+                const errorMessage = document.getElementById("errorMessage");
+                const loading = document.getElementById("loading");
+                const resultContainer = document.getElementById("resultContainer");
+                
+                // Reset previous results
+                errorMessage.textContent = "";
+                resultContainer.classList.remove("visible");
+                
+                // Validate input
+                if (!voterId) {
+                    errorMessage.textContent = "Please enter a valid Voter ID";
+                    return;
+                }
+                
+                // Show loading
+                loading.style.display = "block";
+                
+                try {
+                    // Make API request to your server
+                    const response = await fetch("/api/voter-lookup", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ voterId })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Hide loading
+                    loading.style.display = "none";
+                    
+                    if (data.success) {
+                        // Store voter info in session storage for voting page (from first script)
+                        sessionStorage.setItem('voterInfo', JSON.stringify(data.voter));
+                        
+                        // Check if voter has already voted (from first script)
+                        const voteCheckResponse = await fetch("/api/check-voter-status", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ voterId })
+                        });
+                        
+                        const voteCheckData = await voteCheckResponse.json();
+                        
+                        if (voteCheckData.hasVoted) {
+                            errorMessage.textContent = "You have already cast your vote in this election.";
+                            return;
+                        }
+                        
+                        // Display result
+                        document.getElementById("resultVoterId").textContent = data.voter.voterId;
+                        document.getElementById("resultName").textContent = data.voter.name;
+                        document.getElementById("resultAge").textContent = data.voter.age;
+                        document.getElementById("resultGender").textContent = data.voter.gender;
+                        document.getElementById("resultConstituency").textContent = data.voter.constituency;
+                        document.getElementById("resultStationNumber").textContent = data.voter.pollingStationNumber;
+                        document.getElementById("resultStationName").textContent = data.voter.pollingStationName;
+                        document.getElementById("resultAddress").textContent = data.voter.pollingStationAddress;
+                        
+                        resultContainer.classList.add("visible");
+                    } else {
+                        // Show error
+                        errorMessage.textContent = data.message || "Voter information not found. Please check your Voter ID.";
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    loading.style.display = "none";
+                    errorMessage.textContent = "An error occurred while fetching voter information. Please try again later.";
+                }
+            }
+            
+            // Add event listener to proceed button
+            document.getElementById('proceedButton').addEventListener('click', function() {
+                // Redirect to voting page
+                window.location.href = 'vote.html';
+            });
+            </script>
+</body>
+</html>

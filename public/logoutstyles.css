@@ -1,0 +1,71 @@
+/* Logout specific styles */
+.logout-section {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+ }
+ 
+ 
+ .logout-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 30px;
+    text-align: center;
+ }
+ 
+ 
+ .logout-icon {
+    font-size: 48px;
+    color: #1a73e8;
+    margin-bottom: 20px;
+ }
+ 
+ 
+ .logout-message {
+    margin: 20px 0;
+    color: #333;
+    font-size: 1.1em;
+ }
+ 
+ 
+ .button-group {
+    margin-top: 30px;
+ }
+ 
+ 
+ .button-primary {
+    padding: 10px 25px;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0 10px;
+    display: inline-block;
+ }
+ 
+ 
+ .button-secondary {
+    padding: 10px 25px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0 10px;
+    display: inline-block;
+ }
+ 
+ 
+ .button-primary:hover {
+    background-color: #1557b0;
+ }
+ 
+ 
+ .button-secondary:hover {
+    background-color: #e5e5e5;
+ }
+ 

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - E-Voting System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        .button {
+            pointer-events: auto;
+            z-index: 10;
+            cursor: pointer;
+            background-color: #1a2980;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s, opacity 0.3s;
+        }
+        .button:hover:not(:disabled) {
+            background-color: #122263;
+        }
+       
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+       
+        #captchaContainer {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+       
+        #captchaCode {
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #1a2980;
+            text-decoration: line-through;
+            background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #e0e0e0 10px, #e0e0e0 20px);
+        }
+       
+        #refreshCaptcha {
+            background: none;
+            border: none;
+            color: #1a2980;
+            cursor: pointer;
+            font-size: 20px;
+        }
+ 
+        .form-group {
+            margin-bottom: 15px;
+        }
+ 
+        .validation-message {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #ff0000;
+            min-height: 15px;
+        }
+ 
+        .input-valid {
+            border: 1px solid #4CAF50 !important;
+        }
+ 
+        .input-invalid {
+            border: 1px solid #ff0000 !important;
+        }
+ 
+        #otpSection {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+ 
+        .otp-input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            margin: 0 5px;
+            font-size: 18px;
+        }
+ 
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+ 
+        #resendOTP {
+            color: #1a2980;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .aadhar-input {
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .links-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .links-container a {
+            color: #1a2980;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .links-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>E-Voting System</h1>
+        <p>Secure, Transparent, and Efficient Voting Platform</p>
+    </header>
+ 
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="login.html" class="active">Login</a>
+        <a href="about.html">About</a>
+        <a href="FAQs.html">FAQs</a>
+    </nav>
+ 
+    <main>
+        <section class="section active">
+            <div class="form-container">
+                <h2 style="text-align: center; color: #1a2980;">Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required>
+                        <div class="validation-message" id="emailValidation"></div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
+                        <div class="validation-message" id="passwordValidation"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aadharNumber">Aadhar Card Number</label>
+                        <input type="text" id="aadharNumber" name="aadharNumber"
+                               class="aadhar-input"
+                               placeholder="XXXX XXXX XXXX"
+                               maxlength="14"
+                               required>
+                        <div class="validation-message" id="aadharValidation"></div>
+                    </div>
+
+
+                    <!-- Captcha section remains the same -->
+                    <div class="form-group">
+                        <label for="captcha">Captcha Verification</label>
+                        <div id="captchaContainer">
+                            <span id="captchaCode"></span>
+                            <button type="button" id="refreshCaptcha" title="Refresh Captcha">↻</button>
+                        </div>
+                        <input type="text" id="captchaInput" placeholder="Enter the captcha code" required>
+                        <div class="validation-message" id="captchaValidation"></div>
+                    </div>
+                    
+                    <button type="submit" class="button" id="loginButton">Login</button>
+
+                    <div class="links-container">
+                        <a href="signup.html">New User? Sign up</a>
+                        <a href="forgot-password.html">Forgot Password?</a>
+                    </div>
+                </form>
+                
+                <p id="errorMessage" style="color: red; text-align: center;"></p>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Form elements
+        let form, loginButton, errorMessage;
+
+        // Input elements
+        let emailInput, passwordInput, aadharInput, captchaInput;
+
+        // Validation states
+        let isEmailValid = false;
+        let isPasswordValid = false;
+        let isAadharValid = false;
+        let isCaptchaValid = false;
+
+        // Current captcha value
+        let currentCaptcha = "";
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFormElements();
+            generateInitialCaptcha();
+            addEventListeners();
+        });
+
+        function initializeFormElements() {
+            // Form elements
+            form = document.getElementById('loginForm');
+            loginButton = document.getElementById('loginButton');
+            errorMessage = document.getElementById('errorMessage');
+
+            // Input elements
+            emailInput = document.getElementById('loginEmail');
+            passwordInput = document.getElementById('loginPassword');
+            aadharInput = document.getElementById('aadharNumber');
+            captchaInput = document.getElementById('captchaInput');
+        }
+
+        function addEventListeners() {
+            emailInput.addEventListener('input', validateEmail);
+            passwordInput.addEventListener('input', validatePassword);
+            aadharInput.addEventListener('input', formatAadhar);
+            aadharInput.addEventListener('blur', validateAadhar);
+            captchaInput.addEventListener('input', validateCaptcha);
+            form.addEventListener('submit', handleLogin);
+            document.getElementById('refreshCaptcha').addEventListener('click', refreshCaptcha);
+        }
+
+        // Validation Functions
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            isEmailValid = emailRegex.test(email);
+            
+            updateValidationUI(
+                emailInput,
+                'emailValidation',
+                isEmailValid,
+                'Please enter a valid email address'
+            );
+            updateLoginButton();
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value.trim();
+            const hasMinLength = password.length >= 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+            isPasswordValid = hasMinLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
+            
+            let errorMessage = '';
+            if (!hasMinLength) errorMessage = 'Password must be at least 8 characters long';
+            else if (!hasUpperCase) errorMessage = 'Password must contain at least one uppercase letter';
+            else if (!hasLowerCase) errorMessage = 'Password must contain at least one lowercase letter';
+            else if (!hasNumber) errorMessage = 'Password must contain at least one number';
+            else if (!hasSpecialChar) errorMessage = 'Password must contain at least one special character (!@#$%^&*)';
+
+            updateValidationUI(passwordInput, 'passwordValidation', isPasswordValid, errorMessage);
+            updateLoginButton();
+        }
+
+        function validateAadhar() {
+            const aadhar = aadharInput.value.replace(/\D/g, '');
+            isAadharValid = /^[2-9]\d{11}$/.test(aadhar);
+            
+            updateValidationUI(
+                aadharInput,
+                'aadharValidation',
+                isAadharValid,
+                'Please enter a valid 12-digit Aadhar number'
+            );
+            updateLoginButton();
+        }
+
+        function formatAadhar(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.substring(0, 12);
+            const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            e.target.value = formattedValue;
+            validateAadhar();
+        }
+
+        function validateCaptcha() {
+            const captcha = captchaInput.value.trim();
+            isCaptchaValid = captcha.toLowerCase() === currentCaptcha.toLowerCase();
+            
+            updateValidationUI(
+                captchaInput,
+                'captchaValidation',
+                isCaptchaValid,
+                'Invalid captcha code'
+            );
+            updateLoginButton();
+        }
+
+        // UI Update Functions
+        function updateValidationUI(input, validationId, isValid, errorMessage) {
+            const validationElement = document.getElementById(validationId);
+            
+            if (!input.value) {
+                validationElement.textContent = '';
+                input.classList.remove('input-valid', 'input-invalid');
+            } else {
+                validationElement.textContent = isValid ? '' : errorMessage;
+                input.classList.toggle('input-valid', isValid);
+                input.classList.toggle('input-invalid', !isValid);
+            }
+        }
+
+        function updateLoginButton() {
+            loginButton.disabled = !(isEmailValid && isPasswordValid && isAadharValid && isCaptchaValid);
+        }
+
+        // Captcha Functions
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return captcha;
+        }
+
+        function generateInitialCaptcha() {
+            currentCaptcha = generateCaptcha();
+            document.getElementById('captchaCode').textContent = currentCaptcha;
+        }
+
+        function refreshCaptcha() {
+            currentCaptcha = generateCaptcha();
+            document.getElementById('captchaCode').textContent = currentCaptcha;
+            captchaInput.value = '';
+            isCaptchaValid = false;
+            updateLoginButton();
+        }
+
+        // Login Handler
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            if (!isEmailValid || !isPasswordValid || !isAadharValid || !isCaptchaValid) {
+                return;
+            }
+
+            try {
+                setLoadingState(true, 'Verifying...');
+                errorMessage.textContent = '';
+
+                const response = await fetch('http://localhost:5500/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: emailInput.value.trim(),
+                        password: passwordInput.value,
+                        aadhar: aadharInput.value.replace(/\D/g, '')
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store user data in localStorage or sessionStorage
+                    sessionStorage.setItem('userEmail', emailInput.value.trim());
+                    sessionStorage.setItem('isAdmin', data.user.isAdmin || false);
+                    
+                    // Redirect to OTP page with email in URL parameter
+                    window.location.href = `verify-otp.html?email=${encodeURIComponent(emailInput.value.trim())}`;
+                } else {
+                    throw new Error(data.message || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                showError(error.message || 'An error occurred. Please try again.');
+            } finally {
+                setLoadingState(false, 'Login');
+            }
+        }
+
+        function setLoadingState(isLoading, text) {
+            loginButton.disabled = isLoading;
+            loginButton.textContent = text;
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.color = 'red';
+        }
+    </script>
+</body>
+</html>
